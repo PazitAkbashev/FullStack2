@@ -34,6 +34,7 @@ let timerDisplay = document.getElementById('timer');
 let correctSound = document.getElementById('correct-sound');
 let incorrectSound = document.getElementById('incorrect-sound');
 let gameOverSound = document.getElementById('game-over-sound');
+let backgroundMusic = document.getElementById('background-music');
 
 function startGame(selectedLevel) {
     difficultyLevel = selectedLevel;
@@ -167,6 +168,7 @@ function resetTimer() {
 function startTimer() {
     startTime = Date.now(); // Record start time when timer starts
     timer = setInterval(() => {
+        backgroundMusic.play();
         timeLeft--;
         timerDisplay.textContent = 'Time left: ' + timeLeft + 's';
 
@@ -178,6 +180,7 @@ function startTimer() {
         // Handle time out
         if (timeLeft <= 0) {
             clearInterval(timer);
+            backgroundMusic.pause();
             gameOver(); // End the game when time runs out
         }
     }, 1000); // Update every second
