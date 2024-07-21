@@ -9,10 +9,15 @@
 <body>
     <div class="game-container">
         <h1>Catch the Ball</h1>
+        <p id="user-info">Username: <span id="username">Player</span> | Best Score: <span id="best-score">0</span></p>
         <div id="ball"></div>
         <div id="score">Score: 0</div>
-        <div id="timer">Time: 30s</div>
+        <div id="timer">Time: 15s</div>
     </div>
-    <script src="./cagtch_the_ball.js"></script>
+    <audio id="touch-sound" src="sounds/touch-the-ball.wav"></audio>
+    <audio id="game-over-sound" src="sounds/losing-or-failing.wav"></audio>
+    <audio id="start-again-sound" src="sounds/start-again.wav"></audio>
+    <audio id="background-music" src="sounds/background-song.wav" loop></audio>
+    <script src="./catch_the_ball.js"></script>
 </body>
 </html>
