@@ -1,10 +1,10 @@
 // Initialize game variables
 let score = 0;
 let currentQuestionIndex = 0;
-let difficultyLevel = 'easy'; // Initial difficulty level
+let difficultyLevel = ''; // Initial difficulty level is empty
 let consecutiveCorrectAnswers = 0;
 let timer;
-let timeLeft = 30; // Time limit for each question
+let timeLeft = 15; // Time limit for each question
 let gameEnded = false; // Flag to check if the game has ended
 let startTime; // Track the start time of the game
 
@@ -37,8 +37,10 @@ let gameOverSound = document.getElementById('game-over-sound');
 
 function startGame(selectedLevel) {
     difficultyLevel = selectedLevel;
-    document.getElementById('level-selection').style.display = 'none';
-    document.getElementById('game').style.display = 'block';
+    document.getElementById('question').textContent = ''; // Clear the difficulty selection text
+    answersContainer.innerHTML = ''; // Clear the difficulty selection buttons
+    scoreDisplay.style.display = 'block'; // Show the score display
+    timerDisplay.style.display = 'block'; // Show the timer display
     resetGame();
 }
 
@@ -156,7 +158,7 @@ function resetGame() {
 // Function to reset the timer
 function resetTimer() {
     clearInterval(timer);
-    timeLeft = 30; // Reset time left for each question
+    timeLeft = 15; // Reset time left for each question
     timerDisplay.textContent = 'Time left: ' + timeLeft + 's';
     timerDisplay.style.color = 'black'; // Reset timer color
 }
@@ -206,8 +208,7 @@ function gameOver() {
     document.body.appendChild(gameOverMessage);
 }
 
-// Show the level selection screen on page load
+// Start the game by default on page load
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('level-selection').style.display = 'block';
-    document.getElementById('game').style.display = 'none';
+    startGame('easy'); // Start with easy by default
 });

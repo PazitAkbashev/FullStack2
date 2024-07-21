@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="./homePage.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Game Site</h1>
+        <button id="logout">Logout</button>
+    </header>
+    <main>
+        <section id="games">
+            <h2>Games</h2>
+            <div class="game">
+                <h3>Catch the Ball</h3>
+                <button onclick="window.location.href='catch_the_ball.html'">Play</button>
+                <p>Status: In Progress</p>
+            </div>
+            <div class="game">
+                <h3>Trivia Game</h3>
+                <button onclick="window.location.href='trivia.html'">Play</button>
+                <p>Status: Available</p>
+            </div>
+        </section>
+        <section id="top-players">
+            <h2>Top 3 Players</h2>
+            <ol>
+                <li>Player 1</li>
+                <li>Player 2</li>
+                <li>Player 3</li>
+            </ol>
+        </section>
+    </main>
+    <script src="./homePage.js"></script>
+</body>
+</html>
