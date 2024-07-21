@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Game</title>
+    <link rel="stylesheet" href="./trivia.css">
+</head>
+<body>
+    <div id="level-selection" class="game-container">
+        <h1>Select Difficulty Level</h1>
+        <button onclick="startGame('easy')">Easy</button>
+        <button onclick="startGame('medium')">Medium</button>
+        <button onclick="startGame('hard')">Hard</button>
+    </div>
+    
+    <div id="game" class="game-container" style="display: none;">
+        <p id="timer">Time left: 30s</p>
+        <h1>Trivia Game</h1>
+        <div id="question">Question will appear here</div>
+        <div id="answers">
+            <!-- Answer buttons will be dynamically added here -->
+        </div>
+        <div id="score">Score: 0</div>
+    </div>
+
+    <audio id="correct-sound" src="sounds/correct-answer.wav"></audio>
+    <audio id="incorrect-sound" src="sounds/wrong-answer-.wav"></audio>
+    <audio id="game-over-sound" src="sounds/losing-or-failing.wav"></audio>
+    <script src="./trivia.js"></script>
+</body>
+</html>
