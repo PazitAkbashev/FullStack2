@@ -5,13 +5,31 @@ document.getElementById('signUpForm').addEventListener('submit', function(event)
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
-    // Perform your validation logic here
+    // Check if all fields are filled
+    if (!username || !password || !confirmPassword) {
+        alert("Please fill in all fields");
+        return;
+    }
+
+    // Check if passwords match
     if (password !== confirmPassword) {
         alert("Passwords do not match");
-    } else if (username && password && confirmPassword) {
-        window.location.href = '../WelcomePage/htmlFiles/login.html';
-       //window.location.href = 'file:///C:/Users/pazit/Desktop/fullStack2/homePage/homePage.html';
-    } else {
-        alert("Please fill in all fields");
+        return;
     }
+
+    // Load existing users from Local Storage
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+
+    // Check if the username already exists
+    if (users.some(user => user.username === username)) {
+        alert("Username already exists. Please choose another username.");
+        return;
+    }
+
+    // Save the new user to Local Storage
+    users.push({ username, password });
+    localStorage.setItem('users', JSON.stringify(users));
+
+    // Redirect to the home page
+    window.location.href = '../../homePage/homePage.html'; // Adjust the relative path as needed
 });

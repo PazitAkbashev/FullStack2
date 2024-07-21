@@ -8,10 +8,20 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
     console.log('Username:', username);
     console.log('Password:', password);
 
-    // Perform your validation logic here
-    if (username === "testuser" && password === "password123") {
-        window.location.href = '../../homePage/homePage.html';
+    // Get stored credentials from local storage
+    const storedUsername = localStorage.getItem('username');
+    const storedPassword = localStorage.getItem('password');
+
+    if (storedUsername && storedPassword) {
+        // Check if the entered credentials match the stored credentials
+        if (username === storedUsername && password === storedPassword) {
+            // Redirect to homePage.html if login is successful
+            window.location.href = '../../homePage/homePage.html';
+        } else {
+            alert("Invalid username or password");
+        }
     } else {
-        alert("Invalid username or password");
+        // No credentials are stored, prompt the user to sign up
+        alert("No user found in the system. Please sign up first.");
     }
 });
