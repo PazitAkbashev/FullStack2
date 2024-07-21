@@ -10,7 +10,7 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
 
     // Perform your validation logic here
     if (username === "testuser" && password === "password123") {
-        window.location.href = 'file:///C:/Users/pazit/Desktop/fullStack2/homePage/homePage.html';
+        window.location.href = '../../homePage/homePage.html';
     } else {
         alert("Invalid username or password");
     }
