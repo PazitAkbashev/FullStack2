@@ -5,9 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trivia Game</title>
     <link rel="stylesheet" href="./trivia.css">
+    <style>
+        .home-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: #f00;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+    <button class="home-button" id="home-button">Home</button>
     <div class="game-container">
+        <p id="user-info">Username: <span id="username">Player</span> | Best Score: <span id="best-score">0</span></p>
         <p id="timer">Time left: 30s</p>
         <div id="score">Score: 0</div>
         <h1>Trivia Game</h1>

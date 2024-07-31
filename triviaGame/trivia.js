@@ -1,12 +1,12 @@
 // Initialize game variables
 let score = 0;
 let currentQuestionIndex = 0;
-let difficultyLevel = ''; // Initial difficulty level is empty
+let difficultyLevel = '';
 let consecutiveCorrectAnswers = 0;
 let timer;
-let timeLeft = 15; // Time limit for each question
-let gameEnded = false; // Flag to check if the game has ended
-let startTime; // Track the start time of the game
+let timeLeft = 15;
+let gameEnded = false;
+let startTime;
 
 const questions = {
     easy: [
@@ -30,31 +30,64 @@ let questionDisplay = document.getElementById('question');
 let answersContainer = document.getElementById('answers');
 let scoreDisplay = document.getElementById('score');
 let timerDisplay = document.getElementById('timer');
+let usernameDisplay = document.getElementById('username');
+let bestScoreDisplay = document.getElementById('best-score');
 
 let correctSound = document.getElementById('correct-sound');
 let incorrectSound = document.getElementById('incorrect-sound');
 let gameOverSound = document.getElementById('game-over-sound');
 let backgroundMusic = document.getElementById('background-music');
 
+// Load user data
+function loadUserData() {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+        usernameDisplay.textContent = currentUser.username;
+        bestScoreDisplay.textContent = currentUser.triviaBestScore || 0;
+    }
+}
+
+// Save user data
+function saveUserData(score) {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    
+    if (currentUser) {
+        if (score > (currentUser.triviaBestScore || 0)) {
+            currentUser.triviaBestScore = score;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            const userIndex = users.findIndex(user => user.username === currentUser.username);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            bestScoreDisplay.textContent = score;
+        }
+    }
+}
+
+// Navigate to home page
+function goHome() {
+    window.location.href = '../../homePage/homePage.html';
+}
+
+document.getElementById('home-button').addEventListener('click', goHome);
+
 function startGame(selectedLevel) {
     difficultyLevel = selectedLevel;
-    document.getElementById('question').textContent = ''; // Clear the difficulty selection text
-    answersContainer.innerHTML = ''; // Clear the difficulty selection buttons
-    scoreDisplay.style.display = 'block'; // Show the score display
-    timerDisplay.style.display = 'block'; // Show the timer display
     resetGame();
 }
 
-// Function to load the current question
 function loadQuestion() {
-    if (gameEnded) return; // Prevent loading questions if the game has ended
+    if (gameEnded) return;
     
     let currentQuestions = questions[difficultyLevel];
     let currentQuestion = currentQuestions[currentQuestionIndex];
     
     questionDisplay.textContent = currentQuestion.question;
-    answersContainer.innerHTML = ''; // Clear previous answers
-    
+    answersContainer.innerHTML = '';
+
     currentQuestion.answers.forEach((answer, index) => {
         let button = document.createElement('button');
         button.textContent = answer;
@@ -62,144 +95,118 @@ function loadQuestion() {
         answersContainer.appendChild(button);
     });
     
-    // Reset and start the timer
     resetTimer();
     startTimer();
 }
 
-// Function to check the selected answer
 function checkAnswer(selectedIndex, selectedButton) {
-    if (gameEnded) return; // Prevent checking answers if the game has ended
-    
+    if (gameEnded) return;
+
     let currentQuestions = questions[difficultyLevel];
     let currentQuestion = currentQuestions[currentQuestionIndex];
-    
-    clearInterval(timer); // Stop the timer when the answer is selected
-    
-    // Mark all answers
+
+    clearInterval(timer);
+
     Array.from(answersContainer.children).forEach((button, index) => {
         if (index === currentQuestion.correct) {
             button.classList.add('correct');
         } else if (index === selectedIndex) {
             button.classList.add('incorrect');
         }
-        button.disabled = true; // Disable all buttons after selection
+        button.disabled = true;
     });
-    
+
     if (selectedIndex === currentQuestion.correct) {
-        // Play correct answer sound
         correctSound.play();
-        // If the answer is correct, increment the score and consecutive correct answers
         score++;
         scoreDisplay.textContent = 'Score: ' + score;
         consecutiveCorrectAnswers++;
 
-        // Increase difficulty if the player has answered correctly two times in a row
         if (consecutiveCorrectAnswers >= 2 && difficultyLevel !== 'hard') {
             increaseDifficulty();
         }
     } else {
-        // Play incorrect answer sound
         incorrectSound.play();
-        // Reset consecutive correct answers on incorrect answer
         consecutiveCorrectAnswers = 0;
-        // Optionally decrease difficulty
         decreaseDifficulty();
     }
-    
-    // Move to the next question after a short delay
+
     setTimeout(() => {
         currentQuestionIndex++;
         
         if (currentQuestionIndex < currentQuestions.length) {
             loadQuestion();        
         } else {
-            gameOver(); // Call gameOver if no more questions
+            gameOver();
         }
-    }, 2000); // 2 second delay before moving to the next question
+    }, 2000);
 }
 
-// Function to increase difficulty
 function increaseDifficulty() {
     if (difficultyLevel === 'easy') {
         difficultyLevel = 'medium';
     } else if (difficultyLevel === 'medium') {
         difficultyLevel = 'hard';
     }
-    currentQuestionIndex = 0; // Reset question index for the new difficulty level
+    currentQuestionIndex = 0;
 }
 
-// Function to decrease difficulty
 function decreaseDifficulty() {
     if (difficultyLevel === 'hard') {
         difficultyLevel = 'medium';
     } else if (difficultyLevel === 'medium') {
         difficultyLevel = 'easy';
     }
-    currentQuestionIndex = 0; // Reset question index for the new difficulty level
+    currentQuestionIndex = 0;
 }
 
-// Function to reset the game
 function resetGame() {
-    // Remove the game over screen if it exists
-    let gameOverMessage = document.getElementById('game-over');
-    if (gameOverMessage) {
-        document.body.removeChild(gameOverMessage);
-    }
-    
+    document.getElementById('game-over')?.remove();
     score = 0;
     scoreDisplay.textContent = 'Score: ' + score;
     consecutiveCorrectAnswers = 0;
     currentQuestionIndex = 0;
-    gameEnded = false; // Reset game ended flag
-    startTime = Date.now(); // Reset start time
+    gameEnded = false;
+    startTime = Date.now();
     loadQuestion();
+    loadUserData();
 }
 
-// Function to reset the timer
 function resetTimer() {
     clearInterval(timer);
-    timeLeft = 15; // Reset time left for each question
+    timeLeft = 15;
     timerDisplay.textContent = 'Time left: ' + timeLeft + 's';
-    timerDisplay.style.color = 'black'; // Reset timer color
+    timerDisplay.style.color = 'black';
 }
 
-// Function to start the timer
 function startTimer() {
-    startTime = Date.now(); // Record start time when timer starts
+    startTime = Date.now();
     timer = setInterval(() => {
         backgroundMusic.play();
         timeLeft--;
         timerDisplay.textContent = 'Time left: ' + timeLeft + 's';
 
-        // Turn the timer red in the last 10 seconds
         if (timeLeft <= 10) {
             timerDisplay.style.color = 'red';
         }
 
-        // Handle time out
         if (timeLeft <= 0) {
             clearInterval(timer);
             backgroundMusic.pause();
-            gameOver(); // End the game when time runs out
+            gameOver();
         }
-    }, 1000); // Update every second
+    }, 1000);
 }
 
-// Function to handle game over
 function gameOver() {
-    gameEnded = true; // Set the flag to true to prevent further actions
-    // Play game over sound
+    gameEnded = true;
     gameOverSound.play();
-    // Calculate the time taken
     let timeTaken = Math.floor((Date.now() - startTime) / 1000);
-    
-    // Clear the game screen
+
     questionDisplay.textContent = '';
     answersContainer.innerHTML = '';
     timerDisplay.textContent = '';
 
-    // Display final score and time taken
     let gameOverMessage = document.createElement('div');
     gameOverMessage.id = 'game-over';
     gameOverMessage.innerHTML = `
@@ -209,9 +216,10 @@ function gameOver() {
         <button onclick="resetGame()">Play Again</button>
     `;
     document.body.appendChild(gameOverMessage);
+
+    saveUserData(score);
 }
 
-// Start the game by default on page load
 document.addEventListener('DOMContentLoaded', () => {
-    startGame('easy'); // Start with easy by default
+    startGame('easy');
 });

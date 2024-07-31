@@ -8,20 +8,17 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
     console.log('Username:', username);
     console.log('Password:', password);
 
-    // Get stored credentials from local storage
-    const storedUsername = localStorage.getItem('username');
-    const storedPassword = localStorage.getItem('password');
+    // Get stored users from local storage
+    const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    if (storedUsername && storedPassword) {
-        // Check if the entered credentials match the stored credentials
-        if (username === storedUsername && password === storedPassword) {
-            // Redirect to homePage.html if login is successful
-            window.location.href = '../../homePage/homePage.html';
-        } else {
-            alert("Invalid username or password");
-        }
+    const user = users.find(user => user.username === username && user.password === password);
+
+    if (user) {
+        // Store current user in local storage
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        // Redirect to homePage.html if login is successful
+        window.location.href = '../../homePage/homePage.html';
     } else {
-        // No credentials are stored, prompt the user to sign up
-        alert("No user found in the system. Please sign up first.");
+        alert("Invalid username or password");
     }
 });

@@ -12,82 +12,86 @@ let gameOverSound = document.getElementById('game-over-sound');
 let startAgainSound = document.getElementById('start-again-sound');
 let backgroundMusic = document.getElementById('background-music');
 
-// Load user data from local storage
+// Load user data
 function loadUserData() {
-    let username = localStorage.getItem('username');
-    let bestScore = localStorage.getItem('bestScore') || 0;
-
-    if (username) {
-        usernameDisplay.textContent = username;
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+        usernameDisplay.textContent = currentUser.username;
+        bestScoreDisplay.textContent = currentUser.ballBestScore || 0;
     }
-    bestScoreDisplay.textContent = bestScore;
 }
 
-// Save user data to local storage
+// Save user data
 function saveUserData(score) {
-    let username = localStorage.getItem('username');
-    let bestScore = localStorage.getItem('bestScore') || 0;
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    
+    if (currentUser) {
+        if (score > (currentUser.ballBestScore || 0)) {
+            currentUser.ballBestScore = score;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
-    if (score > bestScore) {
-        localStorage.setItem('bestScore', score);
-        bestScoreDisplay.textContent = score;
+            const userIndex = users.findIndex(user => user.username === currentUser.username);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            bestScoreDisplay.textContent = score;
+        }
     }
 }
 
-// Function to move the ball to a random position
+// Navigate to home page
+function goHome() {
+    window.location.href = '../../homePage/homePage.html';
+}
+
+document.getElementById('home-button').addEventListener('click', goHome);
+
 function moveBall() {
     let gameContainer = document.querySelector('.game-container');
     let maxX = gameContainer.clientWidth - ball.clientWidth;
     let maxY = gameContainer.clientHeight - ball.clientHeight;
-    
+
     let randomX = Math.floor(Math.random() * maxX);
     let randomY = Math.floor(Math.random() * maxY);
-    
+
     ball.style.left = randomX + 'px';
     ball.style.top = randomY + 'px';
 }
 
-// Function to update the timer display
 function updateTimer() {
     timerDisplay.textContent = 'Time: ' + timeLeft + 's';
-    
-    if (timeLeft < 10) {
-        timerDisplay.style.color = 'red';
-    } else {
-        timerDisplay.style.color = 'black';
-    }
+
+    timerDisplay.style.color = timeLeft < 10 ? 'red' : 'black';
 }
 
-// Function to start the game
 function startGame() {
     moveBall();
     loadUserData();
-    backgroundMusic.play(); // Start background music
-    
-    // Set up the timer
+    backgroundMusic.play();
+
     let timerInterval = setInterval(() => {
         timeLeft--;
         updateTimer();
-        
+
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
-            backgroundMusic.pause(); // Pause background music
-            gameOverSound.play(); // Play game over sound
-            saveUserData(score); // Save score if it is the best score
+            backgroundMusic.pause();
+            gameOverSound.play();
+            saveUserData(score);
             displayGameOver();
         }
     }, 1000);
 }
 
-// Event listener for clicking the ball
 ball.addEventListener('click', () => {
     score++;
     scoreDisplay.textContent = 'Score: ' + score;
     moveBall();
-    touchSound.play(); // Play sound when the ball is clicked
+    touchSound.play();
 });
 
-// Function to display game over screen
 function displayGameOver() {
     let gameOverMessage = document.createElement('div');
     gameOverMessage.id = 'game-over';
@@ -100,16 +104,14 @@ function displayGameOver() {
     document.body.appendChild(gameOverMessage);
 }
 
-// Function to reset the game
 function resetGame() {
-    document.getElementById('game-over')?.remove(); // Remove game over screen if it exists
+    document.getElementById('game-over')?.remove();
     score = 0;
     scoreDisplay.textContent = 'Score: ' + score;
     timeLeft = 15;
     updateTimer();
     startGame();
-    startAgainSound.play(); // Play sound when starting a new game
+    startAgainSound.play();
 }
 
-// Start the game
 startGame();
