@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f8ff; /* Light blue background */
@@ -9,6 +10,7 @@ body {
     height: 100vh;
 }
 
+/* Game Container Styles */
 .game-container {
     text-align: center;
     position: relative;
@@ -19,11 +21,13 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Timer and Score Styles */
 #timer, #score {
-    margin-top: px;
+    margin-top: 10px;
     font-size: 25px;
 }
 
+/* Question and Answers Styles */
 #question {
     font-size: 24px;
     margin-bottom: 20px;
@@ -57,6 +61,7 @@ body {
     color: white;
 }
 
+/* Game Over Styles */
 #game-over {
     text-align: center;
     padding: 20px;
@@ -89,4 +94,16 @@ body {
 
 #game-over button:hover {
     background-color: #45a049;
+}
+
+/* Home Button Styles */
+.home-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #f00;
+    color: #fff;
+    border: none;
+    cursor: pointer;
 }

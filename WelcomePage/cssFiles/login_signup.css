@@ -1,31 +1,51 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f8ff;
+    background-color: #f0f8ff; /* Light blue background for a calm look */
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    height: 100vh; /* Full viewport height */
 }
 
 .container {
-    text-align: center;
-    background-color: #ffffff;
+    background-color: #ffffff; /* White background for the form */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Max width for responsiveness */
 }
 
 h1 {
-    color: #333;
+    color: #333; /* Dark gray color for the heading */
     margin-bottom: 20px;
+    text-align: center; /* Center-align the heading */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
 button {
-    background-color: #4caf50;
+    background-color: #4caf50; /* Green background for the button */
     color: white;
-    padding: 15px 20px;
-    margin: 10px;
+    padding: 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -33,5 +53,19 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #45a049; /* Darker green for hover effect */
+}
+
+p {
+    text-align: center; /* Center-align the paragraph */
+}
+
+a {
+    color: #1e90ff; /* Blue color for the link */
+    text-decoration: none;
+    font-size: 14px;
+}
+
+a:hover {
+    text-decoration: underline; /* Underline the link on hover */
 }
