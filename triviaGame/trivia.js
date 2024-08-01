@@ -116,35 +116,40 @@ function checkAnswer(selectedIndex, selectedButton) {
 
     Array.from(answersContainer.children).forEach((button, index) => {
         if (index === currentQuestion.correct) {
-            button.classList.add('correct');
+            button.classList.add('correct'); // Highlight the correct answer
         } else if (index === selectedIndex) {
-            button.classList.add('incorrect');
+            button.classList.add('incorrect'); // Highlight the selected incorrect answer
         }
-        button.disabled = true;
+        button.disabled = true; // Disable all buttons after selecting an answer
     });
 
     if (selectedIndex === currentQuestion.correct) {
-        correctSound.play();
-        score++;
-        scoreDisplay.textContent = 'Score: ' + score;
-        consecutiveCorrectAnswers++;
+        // Correct answer case
+        correctSound.play(); // Play correct answer sound
+        score++; // Increase score
+        scoreDisplay.textContent = 'Score: ' + score; // Update score display
+        consecutiveCorrectAnswers++; // Increase consecutive correct answers count
 
         if (consecutiveCorrectAnswers >= 2 && difficultyLevel !== 'hard') {
-            increaseDifficulty();
+            increaseDifficulty(); // Increase difficulty if conditions are met
         }
     } else {
-        incorrectSound.play();
-        consecutiveCorrectAnswers = 0;
-        decreaseDifficulty();
+        // Incorrect answer case
+        incorrectSound.play(); // Play incorrect answer sound
+        consecutiveCorrectAnswers = 0; // Reset consecutive correct answers count
+        decreaseDifficulty(); // Decrease difficulty if conditions are met
     }
 
+    // Delay for 2 seconds before loading the next question or restarting the current set
     setTimeout(() => {
         currentQuestionIndex++;
         
         if (currentQuestionIndex < currentQuestions.length) {
-            loadQuestion();        
+            loadQuestion(); // Load the next question if there are questions left
         } else {
-            gameOver();
+            // Reset the current question index to start again from the current difficulty level array
+            currentQuestionIndex = 0;
+            loadQuestion();
         }
     }, 2000);
 }
@@ -208,7 +213,6 @@ function startTimer() {
 function gameOver() {
     gameEnded = true;
     gameOverSound.play();
-    let timeTaken = Math.floor((Date.now() - startTime) / 1000);
 
     questionDisplay.textContent = '';
     answersContainer.innerHTML = '';
@@ -219,7 +223,6 @@ function gameOver() {
     gameOverMessage.innerHTML = `
         <h1>Game Over!</h1>
         <p>Your score: ${score}</p>
-        <p>Time taken: ${timeTaken} seconds</p>
         <button onclick="resetGame()">Play Again</button>
     `;
     document.body.appendChild(gameOverMessage);

@@ -11,17 +11,40 @@ body {
 
 .container {
     background-color: #ffffff; /* White background for the form */
-    padding: 20px;
-    border-radius: 8px;
+    padding: 30px; /* Increase padding for better spacing */
+    border-radius: 10px; /* Increase border-radius for smoother corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px; /* Max width for responsiveness */
+    max-width: 500px; /* Max width for responsiveness */
+    text-align: center; /* Center-align text */
 }
 
 h1 {
     color: #333; /* Dark gray color for the heading */
-    margin-bottom: 20px;
+    margin-bottom: 30px; /* Increase margin-bottom for better spacing */
     text-align: center; /* Center-align the heading */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Increase space between buttons */
+}
+
+button {
+    background-color: #4caf50; /* Green background for the button */
+    color: white;
+    padding: 15px 30px; /* Increase padding for larger buttons */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px; /* Increase font size for better readability */
+    transition: background-color 0.3s, transform 0.3s; /* Add transition for hover effect */
+}
+
+button:hover {
+    background-color: #45a049; /* Darker green for hover effect */
+    transform: scale(1.05); /* Slightly enlarge the button on hover */
 }
 
 form {
@@ -40,20 +63,6 @@ input {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-}
-
-button {
-    background-color: #4caf50; /* Green background for the button */
-    color: white;
-    padding: 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: #45a049; /* Darker green for hover effect */
 }
 
 p {
