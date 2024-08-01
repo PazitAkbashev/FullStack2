@@ -1,3 +1,40 @@
+// Declare currentUser globally
+let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+// Function to load current user data from Local Storage
+function loadUserData() {
+    if (currentUser) {
+        usernameDisplay.textContent = currentUser.username;
+        bestScoreDisplay.textContent = currentUser.triviaBestScore || 0;
+    }
+}
+
+// Function to save user data to Local Storage
+function saveUserData(score) {
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    
+    if (currentUser) {
+        if (score > (currentUser.triviaBestScore || 0)) {
+            currentUser.triviaBestScore = score;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            const userIndex = users.findIndex(user => user.username === currentUser.username);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+            bestScoreDisplay.textContent = score;
+        }
+    }
+}
+
+// Function to navigate to home page
+function goHome() {
+    window.location.href = '../../homePage/homePage.html';
+}
+
+document.getElementById('home-button').addEventListener('click', goHome);
+
 // Initialize game variables
 let score = 0;
 let currentQuestionIndex = 0;
@@ -38,41 +75,11 @@ let incorrectSound = document.getElementById('incorrect-sound');
 let gameOverSound = document.getElementById('game-over-sound');
 let backgroundMusic = document.getElementById('background-music');
 
-// Load user data
-function loadUserData() {
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser) {
-        usernameDisplay.textContent = currentUser.username;
-        bestScoreDisplay.textContent = currentUser.triviaBestScore || 0;
-    }
-}
-
-// Save user data
-function saveUserData(score) {
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    let users = JSON.parse(localStorage.getItem('users')) || [];
-    
-    if (currentUser) {
-        if (score > (currentUser.triviaBestScore || 0)) {
-            currentUser.triviaBestScore = score;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
-            const userIndex = users.findIndex(user => user.username === currentUser.username);
-            if (userIndex !== -1) {
-                users[userIndex] = currentUser;
-                localStorage.setItem('users', JSON.stringify(users));
-            }
-            bestScoreDisplay.textContent = score;
-        }
-    }
-}
-
-// Navigate to home page
-function goHome() {
-    window.location.href = '../../homePage/homePage.html';
-}
-
-document.getElementById('home-button').addEventListener('click', goHome);
+// Load user data on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadUserData();
+    startGame('easy');
+});
 
 function startGame(selectedLevel) {
     difficultyLevel = selectedLevel;
